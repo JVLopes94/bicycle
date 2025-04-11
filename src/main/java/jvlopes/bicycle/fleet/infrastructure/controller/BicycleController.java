@@ -4,7 +4,9 @@ import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycledCreatedDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController("/bicycles")
 public class BicycleController {
 
     private final BicycleService bicycleService;
