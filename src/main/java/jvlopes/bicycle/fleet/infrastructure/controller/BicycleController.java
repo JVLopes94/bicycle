@@ -1,4 +1,4 @@
-package jvlopes.bicycle.fleet.infrastructure.controller.dto;
+package jvlopes.bicycle.fleet.infrastructure.controller;
 
 import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
