@@ -55,4 +55,24 @@ public final class Bicycle {
     private void validateId(String id) {
         if (id == null || id.isEmpty()) throw new IllegalArgumentException("id is null or empty");
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public BicycleStatus getStatus() {
+        return status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public LocalDateTime getLastMaintenanceDate() {
+        return lastMaintenanceDate;
+    }
 }
