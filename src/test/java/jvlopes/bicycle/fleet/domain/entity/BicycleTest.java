@@ -4,6 +4,7 @@ import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -21,16 +22,6 @@ class BicycleTest {
                         LocalDateTime.now().minusDays(15)
                 )
         );
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new Bicycle(
-                        "",
-                        "model",
-                        BicycleStatus.AVAILABLE,
-                        "Sao Paulo",
-                        LocalDateTime.now().minusDays(15)
-                )
-        );
     }
 
     @Test
@@ -38,7 +29,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         null,
                         BicycleStatus.AVAILABLE,
                         "Sao Paulo",
@@ -48,7 +39,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         "",
                         BicycleStatus.AVAILABLE,
                         "Sao Paulo",
@@ -62,7 +53,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         "model",
                         null,
                         "Sao Paulo",
@@ -76,7 +67,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         "model",
                         BicycleStatus.AVAILABLE,
                         null,
@@ -86,7 +77,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         "model",
                         BicycleStatus.AVAILABLE,
                         "",
@@ -100,7 +91,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         "model",
                         BicycleStatus.AVAILABLE,
                         "Sao Paulo",
@@ -110,7 +101,7 @@ class BicycleTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Bicycle(
-                        "abc123",
+                        UUID.randomUUID(),
                         "model",
                         BicycleStatus.AVAILABLE,
                         "Sao Paulo",

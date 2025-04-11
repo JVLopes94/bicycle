@@ -3,17 +3,18 @@ package jvlopes.bicycle.fleet.domain.entity;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public final class Bicycle {
 
-    private final String id;
+    private final UUID id;
     private final String model;
     private final BicycleStatus status;
     private final String location;
     private final LocalDateTime lastMaintenanceDate;
 
     public Bicycle(
-            String id,
+            UUID id,
             String model,
             BicycleStatus status,
             String location,
@@ -27,7 +28,7 @@ public final class Bicycle {
         this.lastMaintenanceDate = lastMaintenanceDate;
     }
 
-    private void validate(String id, String model, BicycleStatus status, String location, LocalDateTime lastMaintenanceDate) {
+    private void validate(UUID id, String model, BicycleStatus status, String location, LocalDateTime lastMaintenanceDate) {
         validateId(id);
         validateModel(model);
         validateStatus(status);
@@ -52,11 +53,11 @@ public final class Bicycle {
         if (model == null || model.isEmpty()) throw new IllegalArgumentException("model is null or empty");
     }
 
-    private void validateId(String id) {
-        if (id == null || id.isEmpty()) throw new IllegalArgumentException("id is null or empty");
+    private void validateId(UUID id) {
+        if (id == null) throw new IllegalArgumentException("id is null or empty");
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

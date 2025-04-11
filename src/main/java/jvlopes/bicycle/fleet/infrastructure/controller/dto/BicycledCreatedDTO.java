@@ -2,8 +2,10 @@ package jvlopes.bicycle.fleet.infrastructure.controller.dto;
 
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 
+import java.util.UUID;
+
 public record BicycledCreatedDTO(
-        String id,
+        UUID id,
         String model,
         String status,
         String location,

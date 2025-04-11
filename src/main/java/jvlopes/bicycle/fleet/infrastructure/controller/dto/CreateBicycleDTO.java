@@ -4,9 +4,10 @@ import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record CreateBicycleDTO(
-        String id,
+        UUID id,
         String model,
         String status,
         String location,
