@@ -4,6 +4,8 @@ import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycledCreatedDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,9 +19,11 @@ public class BicycleController {
     }
 
     @PostMapping
-    public BicycledCreatedDTO create(CreateBicycleDTO createBicycleDTO) {
+    public ResponseEntity<BicycledCreatedDTO> create(CreateBicycleDTO createBicycleDTO) {
         Bicycle bicycle = bicycleService.save(createBicycleDTO.toBicycle());
-        return BicycledCreatedDTO.fromBicycle(bicycle);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BicycledCreatedDTO.fromBicycle(bicycle));
     }
 
 }
