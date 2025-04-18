@@ -4,6 +4,7 @@ import jvlopes.bicycle.user.domain.vo.Email;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class User {
@@ -26,5 +27,17 @@ public final class User {
         this.email = email;
         this.membershipStartDate = membershipStartDate;
         this.activeRentals = activeRentals;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
