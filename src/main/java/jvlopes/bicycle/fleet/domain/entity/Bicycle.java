@@ -3,18 +3,18 @@ package jvlopes.bicycle.fleet.domain.entity;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Objects;
 
 public final class Bicycle {
 
-    private final UUID id;
+    private final BicycleID id;
     private final String model;
     private final BicycleStatus status;
     private final String location;
     private final LocalDateTime lastMaintenanceDate;
 
     public Bicycle(
-            UUID id,
+            BicycleID id,
             String model,
             BicycleStatus status,
             String location,
@@ -28,7 +28,7 @@ public final class Bicycle {
         this.lastMaintenanceDate = lastMaintenanceDate;
     }
 
-    private void validate(UUID id, String model, BicycleStatus status, String location, LocalDateTime lastMaintenanceDate) {
+    private void validate(BicycleID id, String model, BicycleStatus status, String location, LocalDateTime lastMaintenanceDate) {
         validateId(id);
         validateModel(model);
         validateStatus(status);
@@ -53,11 +53,11 @@ public final class Bicycle {
         if (model == null || model.isEmpty()) throw new IllegalArgumentException("model is null or empty");
     }
 
-    private void validateId(UUID id) {
+    private void validateId(BicycleID id) {
         if (id == null) throw new IllegalArgumentException("id is null or empty");
     }
 
-    public UUID getId() {
+    public BicycleID getId() {
         return id;
     }
 
@@ -75,5 +75,17 @@ public final class Bicycle {
 
     public LocalDateTime getLastMaintenanceDate() {
         return lastMaintenanceDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Bicycle bicycle = (Bicycle) o;
+        return Objects.equals(id, bicycle.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

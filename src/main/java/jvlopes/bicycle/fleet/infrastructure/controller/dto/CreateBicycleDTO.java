@@ -1,13 +1,13 @@
 package jvlopes.bicycle.fleet.infrastructure.controller.dto;
 
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
+import jvlopes.bicycle.fleet.domain.entity.BicycleID;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public record CreateBicycleDTO(
-        UUID id,
+        String id,
         String model,
         String status,
         String location,
@@ -15,7 +15,7 @@ public record CreateBicycleDTO(
 ) {
     public Bicycle toBicycle() {
         return new Bicycle(
-                id,
+                new BicycleID(id),
                 model,
                 BicycleStatus.valueOf(status),
                 location,
