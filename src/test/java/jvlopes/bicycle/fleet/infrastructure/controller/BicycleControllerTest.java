@@ -47,7 +47,6 @@ class BicycleControllerTest {
         @Test
         void shouldReturnCorrectResponse() {
             String bicycleId = "113ec296-9048-4f87-9aab-d075fae6e767";
-            String lastMaintenanceDate = "2025-04-10T10:15:30";
             Bicycle createdBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
             doReturn(createdBicycle).when(bicycleService).save(any());
             ResponseEntity<BicycleCreatedDTO> response = bicycleController.create(new CreateBicycleDTO(
@@ -55,7 +54,7 @@ class BicycleControllerTest {
                     "model",
                     "AVAILABLE",
                     "SP",
-                    lastMaintenanceDate
+                    "2025-04-10T10:15:30"
             ));
             BicycleCreatedDTO responseBody = response.getBody();
             assertNotNull(responseBody);
