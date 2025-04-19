@@ -197,20 +197,12 @@ class BicycleControllerTest {
     class GetBicycleByID {
 
         @Test
-        void shouldReturnHttpOk() {
-            String bicycleId = "1234";
-            Bicycle foundBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
-            doReturn(foundBicycle).when(bicycleService).getByID(anyString());
-            ResponseEntity<BicycleDetailsDTO> response = bicycleController.getByID(bicycleId);
-            assertEquals(HttpStatus.OK, response.getStatusCode());
-        }
-
-        @Test
         void shouldReturnBicycleWithSameIdWhenItExists() {
             String bicycleId = "1234";
             Bicycle foundBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
             doReturn(foundBicycle).when(bicycleService).getByID(anyString());
             ResponseEntity<BicycleDetailsDTO> response = bicycleController.getByID(bicycleId);
+            assertEquals(HttpStatus.OK, response.getStatusCode());
             assertNotNull(response.getBody());
             assertEquals(bicycleId, response.getBody().id());
         }
