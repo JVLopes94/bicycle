@@ -22,6 +22,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -112,6 +114,10 @@ class BicycleControllerTest {
 
             assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
             assertEquals(bicycleList.size(), responseBody.getContent().size());
+
+            Set<String> bicycleIDs = bicycleList.stream().map(b -> b.getId().toString()).collect(Collectors.toSet());
+            var responseIDs = responseBody.getContent().stream().map(BicycleDetailsDTO::id).collect(Collectors.toSet());
+            assertTrue(responseIDs.containsAll(bicycleIDs));
         }
 
     }
