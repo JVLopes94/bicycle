@@ -20,7 +20,10 @@ public class MaintenanceService {
     }
 
     public Bicycle putBicycleAvailable(String bicycleID) {
-        return null;
+        Bicycle bicycle = bicycleService.getByID(bicycleID);
+        bicycle.putAvailable();
+        bicycleService.save(bicycle);
+        return bicycle;
     }
 
 }

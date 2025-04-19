@@ -73,4 +73,49 @@ class MaintenanceServiceTest {
 
     }
 
+    @Nested
+    class PutBicycleAvailable {
+
+        @Captor
+        ArgumentCaptor<String> bicycleIDCaptor;
+
+        @Captor
+        ArgumentCaptor<Bicycle> bicycleCaptor;
+
+        @Test
+        void shouldThrowInvalidBicycleIdException() {
+            doThrow(InvalidBicycleIdException.class).when(bicycleService).getByID(any());
+            assertThrows(InvalidBicycleIdException.class, () -> maintenanceService.putBicycleAvailable(""));
+            assertThrows(InvalidBicycleIdException.class, () -> maintenanceService.putBicycleAvailable(null));
+        }
+
+        @Test
+        void shouldThrowBicycleNotFoundException() {
+            doThrow(BicycleNotFoundException.class).when(bicycleService).getByID(any());
+            assertThrows(BicycleNotFoundException.class, () -> maintenanceService.putBicycleAvailable("1234"));
+        }
+
+        @Test
+        void shouldPassCorrectParametersToBicycleService() {
+            String expectedBicycleID = "abc-123";
+            Bicycle expectedBicycle = BicycleTestFactory.createBicycleUnderMaintenanceWithID(new BicycleID(expectedBicycleID));
+            doReturn(expectedBicycle).when(bicycleService).getByID(any());
+
+            Bicycle returnedBicycle = maintenanceService.putBicycleAvailable("abc-123");
+
+            verify(bicycleService).getByID(bicycleIDCaptor.capture());
+            String captured = bicycleIDCaptor.getValue();
+            assertEquals(expectedBicycleID, captured);
+            assertEquals(expectedBicycle, returnedBicycle);
+            assertEquals(BicycleStatus.AVAILABLE, returnedBicycle.getStatus());
+
+            verify(bicycleService).save(bicycleCaptor.capture());
+            Bicycle capturedBicycle = bicycleCaptor.getValue();
+            assertEquals(expectedBicycle, capturedBicycle);
+
+            verifyNoMoreInteractions(bicycleService);
+        }
+
+    }
+
 }

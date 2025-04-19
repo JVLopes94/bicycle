@@ -92,4 +92,8 @@ public final class Bicycle {
     public void putUnderMaintenance() {
         status = BicycleStatus.UNDER_MAINTENANCE;
     }
+
+    public void putAvailable() {
+        status = BicycleStatus.AVAILABLE;
+    }
 }
