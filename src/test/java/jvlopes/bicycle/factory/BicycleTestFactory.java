@@ -18,4 +18,14 @@ public class BicycleTestFactory {
         );
     }
 
+    public static Bicycle createBicycleWithID(BicycleID bicycleID) {
+        return new Bicycle(
+                bicycleID,
+                "model",
+                BicycleStatus.AVAILABLE,
+                "SP",
+                LocalDateTime.now()
+        );
+    }
+
 }

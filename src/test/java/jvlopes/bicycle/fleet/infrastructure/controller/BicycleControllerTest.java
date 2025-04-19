@@ -2,18 +2,18 @@ package jvlopes.bicycle.fleet.infrastructure.controller;
 
 import jvlopes.bicycle.factory.BicycleTestFactory;
 import jvlopes.bicycle.fleet.application.BicycleService;
+import jvlopes.bicycle.fleet.domain.entity.Bicycle;
+import jvlopes.bicycle.fleet.domain.entity.BicycleID;
+import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleCreatedDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
-import java.util.UUID;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,9 +27,6 @@ class BicycleControllerTest {
 
     @InjectMocks
     private BicycleController bicycleController;
-
-    @Captor
-    private ArgumentCaptor<UUID> bicycleUuidCaptor;
 
     @Nested
     class Create {
@@ -49,7 +46,20 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnCorrectResponse() {
-
+            String bicycleId = "113ec296-9048-4f87-9aab-d075fae6e767";
+            String lastMaintenanceDate = "2025-04-10T10:15:30";
+            Bicycle createdBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
+            doReturn(createdBicycle).when(bicycleService).save(any());
+            ResponseEntity<BicycleCreatedDTO> response = bicycleController.create(new CreateBicycleDTO(
+                    bicycleId,
+                    "model",
+                    "AVAILABLE",
+                    "SP",
+                    lastMaintenanceDate
+            ));
+            BicycleCreatedDTO responseBody = response.getBody();
+            assertNotNull(responseBody);
+            assertEquals(responseBody.id(), createdBicycle.getId().toString());
         }
 
         @Test
