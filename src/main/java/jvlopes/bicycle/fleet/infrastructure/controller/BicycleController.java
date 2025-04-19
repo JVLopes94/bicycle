@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController("/bicycles")
 public class BicycleController {
 
@@ -23,6 +25,7 @@ public class BicycleController {
         Bicycle bicycle = bicycleService.save(createBicycleDTO.toBicycle());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .location(URI.create("/bicycles/" + bicycle.getId()))
                 .body(BicycleCreatedDTO.fromBicycle(bicycle));
     }
 
