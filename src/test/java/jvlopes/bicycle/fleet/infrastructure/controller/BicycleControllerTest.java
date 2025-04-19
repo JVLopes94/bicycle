@@ -40,23 +40,14 @@ class BicycleControllerTest {
     @Mock
     private BicycleService bicycleService;
 
-    @Captor
-    ArgumentCaptor<Integer> pageCaptor;
-
-    @Captor
-    ArgumentCaptor<Integer> sizeCaptor;
-
-    @Captor
-    ArgumentCaptor<BicycleStatus> statusCaptor;
-
-    @Captor
-    ArgumentCaptor<Bicycle> bicycleCaptor;
-
     @InjectMocks
     private BicycleController bicycleController;
 
     @Nested
     class Create {
+
+        @Captor
+        ArgumentCaptor<Bicycle> bicycleCaptor;
 
         @Test
         void shouldReturnHttpOk() {
@@ -127,6 +118,15 @@ class BicycleControllerTest {
 
     @Nested
     class ListBicycles {
+
+        @Captor
+        ArgumentCaptor<Integer> pageCaptor;
+
+        @Captor
+        ArgumentCaptor<Integer> sizeCaptor;
+
+        @Captor
+        ArgumentCaptor<BicycleStatus> statusCaptor;
 
         @Test
         void shouldReturnHttpOk() {
