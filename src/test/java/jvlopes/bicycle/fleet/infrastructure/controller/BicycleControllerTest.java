@@ -130,6 +130,9 @@ class BicycleControllerTest {
             assertNotNull(responseBody);
 
             assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
+            assertEquals(serviceReturn.getTotalPages(), responseBody.getTotalPages());
+            assertEquals(serviceReturn.getPageSize(), responseBody.getSize());
+            assertEquals(serviceReturn.getContent().size(), responseBody.getNumberOfElements());
         }
 
     }
