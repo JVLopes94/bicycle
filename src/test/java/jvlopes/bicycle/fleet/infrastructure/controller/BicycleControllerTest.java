@@ -102,7 +102,7 @@ class BicycleControllerTest {
 
         @ParameterizedTest
         @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
-        void shouldReturnCorrectResponse(List<Bicycle> bicycleList) {
+        void responseShouldReturnAndInformCorrectSizeInformation(List<Bicycle> bicycleList) {
             var serviceReturn = new PageImpl<>(bicycleList);
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
