@@ -91,5 +91,12 @@ class BicycleControllerTest {
             assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
+        @Test
+        void shouldReturnCorrectResponse() {
+            ResponseEntity<?> response = bicycleController.list();
+            var responseBody = response.getBody();
+            assertNotNull(responseBody);
+        }
+
     }
 }
