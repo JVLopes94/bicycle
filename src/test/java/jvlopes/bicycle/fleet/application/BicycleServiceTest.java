@@ -34,20 +34,11 @@ class BicycleServiceTest {
     @InjectMocks
     private BicycleService bicycleService;
 
-    @Captor
-    ArgumentCaptor<Bicycle> bicycleCaptor;
-
-    @Captor
-    ArgumentCaptor<Integer> pageCaptor;
-
-    @Captor
-    ArgumentCaptor<Integer> sizeCaptor;
-
-    @Captor
-    ArgumentCaptor<BicycleStatus> statusCaptor;
-
     @Nested
     class Save {
+
+        @Captor
+        ArgumentCaptor<Bicycle> bicycleCaptor;
 
         @Test
         void shouldInvokeRepositoryWithCorrectParameters() {
@@ -71,6 +62,12 @@ class BicycleServiceTest {
     @Nested
     class ListBicycles {
 
+        @Captor
+        ArgumentCaptor<Integer> sizeCaptor;
+
+        @Captor
+        ArgumentCaptor<Integer> pageCaptor;
+
         @Test
         void shouldInvokeRepositoryWithCorrectParameters() {
             bicycleService.list(0, 10);
@@ -85,6 +82,15 @@ class BicycleServiceTest {
 
     @Nested
     class ListByStatus {
+
+        @Captor
+        ArgumentCaptor<BicycleStatus> statusCaptor;
+
+        @Captor
+        ArgumentCaptor<Integer> sizeCaptor;
+
+        @Captor
+        ArgumentCaptor<Integer> pageCaptor;
 
         @Test
         void shouldInvokeRepositoryWithCorrectParameters() {
