@@ -29,4 +29,7 @@ public class BicycleController {
                 .body(BicycleCreatedDTO.fromBicycle(bicycle));
     }
 
+    public ResponseEntity<?> list() {
+        return ResponseEntity.ok().build();
+    }
 }

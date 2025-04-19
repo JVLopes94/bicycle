@@ -81,4 +81,15 @@ class BicycleControllerTest {
             assertTrue(responseHeaders.getLocation().toString().contains(bicycleId));
         }
     }
+
+    @Nested
+    class List {
+
+        @Test
+        void shouldReturnHttpOk() {
+            var response = bicycleController.list();
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
+
+    }
 }
