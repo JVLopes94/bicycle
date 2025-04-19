@@ -15,6 +15,7 @@ public class MaintenanceService {
     public Bicycle putBicycleUnderMaintenance(String bicycleID) {
         Bicycle bicycle = bicycleService.getByID(bicycleID);
         bicycle.putUnderMaintenance();
+        bicycleService.save(bicycle);
         return bicycle;
     }
 
