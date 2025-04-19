@@ -9,6 +9,8 @@ import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,7 +91,7 @@ class BicycleControllerTest {
     }
 
     @Nested
-    class List {
+    class ListBicycles {
 
         @Test
         void shouldReturnHttpOk() {
@@ -97,10 +100,10 @@ class BicycleControllerTest {
             assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
-        @Test
-        void shouldReturnCorrectResponse() {
-            ArrayList<Bicycle> existingBicycles = new ArrayList<>();
-            var serviceReturn = new PageImpl<>(existingBicycles);
+        @ParameterizedTest
+        @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
+        void shouldReturnCorrectResponse(List<Bicycle> bicycleList) {
+            var serviceReturn = new PageImpl<>(bicycleList);
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
             ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list();
@@ -108,7 +111,7 @@ class BicycleControllerTest {
             assertNotNull(responseBody);
 
             assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
-            assertEquals(0, responseBody.getContent().size());
+            assertEquals(bicycleList.size(), responseBody.getContent().size());
         }
 
     }
