@@ -46,4 +46,9 @@ public class BicycleController {
                 bicycles.getTotalElements()
         ));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BicycleDetailsDTO> getByID(String id) {
+        return ResponseEntity.ok().build();
+    }
 }

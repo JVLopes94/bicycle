@@ -192,4 +192,15 @@ class BicycleControllerTest {
         }
 
     }
+
+    @Nested
+    class GetBicycleByID {
+
+        @Test
+        void shouldReturnHttpOk() {
+            var response = bicycleController.getByID("");
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
+
+    }
 }
