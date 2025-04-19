@@ -2,6 +2,7 @@ package jvlopes.bicycle.fleet.infrastructure.controller;
 
 import jvlopes.bicycle.factory.BicycleTestFactory;
 import jvlopes.bicycle.fleet.application.BicycleService;
+import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
@@ -15,13 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -97,27 +97,39 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnHttpOk() {
-            doReturn(new PageImpl<Bicycle>(new ArrayList<>())).when(bicycleService).list(anyInt(), anyInt());
-            var response = bicycleController.list();
+            doReturn(new PageResponse<Bicycle>(
+                    new ArrayList<>(), 0, 0, 0, 1
+            )).when(bicycleService).list(anyInt(), anyInt());
+            var response = bicycleController.list(PageRequest.of(0, 10));
             assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
         @ParameterizedTest
         @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
-        void responseShouldContainAllBicyclesReturnedByService(List<Bicycle> bicycleList) {
-            var serviceReturn = new PageImpl<>(bicycleList);
+        void responseShouldContainAllBicyclesReturnedByService(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
-            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list();
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(PageRequest.of(0, 10));
+            Page<BicycleDetailsDTO> responseBody = response.getBody();
+            assertNotNull(responseBody);
+
+            assertEquals(serviceReturn.getContent().size(), responseBody.getContent().size());
+
+            Set<String> bicycleIDs = serviceReturn.getContent().stream().map(b -> b.getId().toString()).collect(Collectors.toSet());
+            var responseIDs = responseBody.getContent().stream().map(BicycleDetailsDTO::id).collect(Collectors.toSet());
+            assertTrue(responseIDs.containsAll(bicycleIDs));
+        }
+
+        @ParameterizedTest
+        @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
+        void responseShouldContainCorrectPaginationData(PageResponse<Bicycle> serviceReturn) {
+            doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
+
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(PageRequest.of(0, 10));
             Page<BicycleDetailsDTO> responseBody = response.getBody();
             assertNotNull(responseBody);
 
             assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
-            assertEquals(bicycleList.size(), responseBody.getContent().size());
-
-            Set<String> bicycleIDs = bicycleList.stream().map(b -> b.getId().toString()).collect(Collectors.toSet());
-            var responseIDs = responseBody.getContent().stream().map(BicycleDetailsDTO::id).collect(Collectors.toSet());
-            assertTrue(responseIDs.containsAll(bicycleIDs));
         }
 
     }

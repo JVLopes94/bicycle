@@ -1,10 +1,13 @@
 package jvlopes.bicycle.fleet.infrastructure.controller;
 
 import jvlopes.bicycle.fleet.application.BicycleService;
+import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,8 +33,15 @@ public class BicycleController {
                 .body(BicycleDetailsDTO.fromBicycle(bicycle));
     }
 
-    public ResponseEntity<Page<BicycleDetailsDTO>> list() {
-        Page<Bicycle> bicycles = bicycleService.list(0, 0);
-        return ResponseEntity.ok(bicycles.map(BicycleDetailsDTO::fromBicycle));
+    public ResponseEntity<Page<BicycleDetailsDTO>> list(Pageable pageable) {
+        PageResponse<Bicycle> bicycles = bicycleService.list(
+                pageable.getPageNumber(),
+                pageable.getPageSize()
+        );
+        return ResponseEntity.ok(new PageImpl<>(
+                bicycles.getContent().stream().map(BicycleDetailsDTO::fromBicycle).toList(),
+                pageable,
+                bicycles.getTotalPages()
+        ));
     }
 }

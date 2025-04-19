@@ -1,5 +1,6 @@
 package jvlopes.bicycle.factory;
 
+import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
@@ -32,13 +33,24 @@ public class BicycleTestFactory {
     }
 
     public static Stream<Arguments> bicycleListProvider() {
+        PageResponse<Bicycle> emptyResponse = new PageResponse<>(
+                List.of(), 0, 0, 0, 0
+        );
+        List<Bicycle> content = List.of(createBicycleWithID(new BicycleID("1234")));
+        PageResponse<Bicycle> responseWithOneItem = new PageResponse<>(
+                content, 1, 1, 0, content.size()
+        );
+        List<Bicycle> content2 = List.of(
+                createBicycleWithID(new BicycleID("1234")),
+                createBicycleWithID(new BicycleID("5678"))
+        );
+        PageResponse<Bicycle> responseWithTwoItems = new PageResponse<>(
+                content2, 2, 1, 0, content2.size()
+        );
         return Stream.of(
-                Arguments.of(
-                        List.of()),
-                Arguments.of(
-                        List.of(createBicycleWithID(new BicycleID("1234")))),
-                Arguments.of(
-                        List.of(createBicycleWithID(new BicycleID("1234")), createBicycleWithID(new BicycleID("5678"))))
+                Arguments.of(emptyResponse),
+                Arguments.of(responseWithOneItem),
+                Arguments.of(responseWithTwoItems)
         );
     }
 
