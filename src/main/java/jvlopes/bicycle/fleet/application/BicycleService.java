@@ -36,4 +36,8 @@ public class BicycleService {
     public Bicycle putBicycleUnderMaintenance(String bicycleID) {
         return null;
     }
+
+    public Bicycle putBicycleAvailable(String bicycleID) {
+        return null;
+    }
 }

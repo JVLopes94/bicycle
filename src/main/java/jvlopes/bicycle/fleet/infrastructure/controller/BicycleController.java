@@ -75,4 +75,16 @@ public class BicycleController {
         }
         return ResponseEntity.ok(BicycleDetailsDTO.fromBicycle(bicycle));
     }
+
+    public ResponseEntity<BicycleDetailsDTO> putBicycleAvailable(String bicycleID) {
+        Bicycle bicycle;
+        try {
+            bicycle = bicycleService.putBicycleAvailable(bicycleID);
+        } catch (BicycleNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (InvalidBicycleIdException e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(BicycleDetailsDTO.fromBicycle(bicycle));
+    }
 }
