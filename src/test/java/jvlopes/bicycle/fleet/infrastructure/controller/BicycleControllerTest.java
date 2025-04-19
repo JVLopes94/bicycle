@@ -2,6 +2,7 @@ package jvlopes.bicycle.fleet.infrastructure.controller;
 
 import jvlopes.bicycle.factory.BicycleTestFactory;
 import jvlopes.bicycle.fleet.application.BicycleService;
+import jvlopes.bicycle.fleet.application.MaintenanceService;
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
@@ -39,6 +40,9 @@ class BicycleControllerTest {
 
     @Mock
     private BicycleService bicycleService;
+
+    @Mock
+    private MaintenanceService maintenanceService;
 
     @InjectMocks
     private BicycleController bicycleController;
@@ -234,7 +238,7 @@ class BicycleControllerTest {
         void shouldReturnUpdatedBicycleWithSameIdWhenItExists() {
             String bicycleId = "1234";
             Bicycle foundBicycle = BicycleTestFactory.createBicycleUnderMaintenanceWithID(new BicycleID(bicycleId));
-            doReturn(foundBicycle).when(bicycleService).putBicycleUnderMaintenance(anyString());
+            doReturn(foundBicycle).when(maintenanceService).putBicycleUnderMaintenance(anyString());
             ResponseEntity<BicycleDetailsDTO> response = bicycleController.putBicycleUnderMaintenance(bicycleId);
             assertEquals(HttpStatus.OK, response.getStatusCode());
             assertNotNull(response.getBody());
@@ -244,15 +248,15 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnHttpNotFoundWhenIdDoesNotExist() {
-            doThrow(BicycleNotFoundException.class).when(bicycleService).putBicycleUnderMaintenance(anyString());
+            doThrow(BicycleNotFoundException.class).when(maintenanceService).putBicycleUnderMaintenance(anyString());
             ResponseEntity<BicycleDetailsDTO> response = bicycleController.putBicycleUnderMaintenance("1234");
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
 
         @Test
         void shouldReturnHttpBadRequestWhenIdIsInvalid() {
-            doThrow(InvalidBicycleIdException.class).when(bicycleService).putBicycleUnderMaintenance(anyString());
-            doThrow(InvalidBicycleIdException.class).when(bicycleService).putBicycleUnderMaintenance(null);
+            doThrow(InvalidBicycleIdException.class).when(maintenanceService).putBicycleUnderMaintenance(anyString());
+            doThrow(InvalidBicycleIdException.class).when(maintenanceService).putBicycleUnderMaintenance(null);
             var response = bicycleController.putBicycleUnderMaintenance("");
             assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
@@ -269,7 +273,7 @@ class BicycleControllerTest {
         void shouldReturnUpdatedBicycleWithSameIdWhenItExists() {
             String bicycleId = "1234";
             Bicycle foundBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
-            doReturn(foundBicycle).when(bicycleService).putBicycleAvailable(anyString());
+            doReturn(foundBicycle).when(maintenanceService).putBicycleAvailable(anyString());
             ResponseEntity<BicycleDetailsDTO> response = bicycleController.putBicycleAvailable(bicycleId);
             assertEquals(HttpStatus.OK, response.getStatusCode());
             assertNotNull(response.getBody());
@@ -279,15 +283,15 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnHttpNotFoundWhenIdDoesNotExist() {
-            doThrow(BicycleNotFoundException.class).when(bicycleService).putBicycleAvailable(anyString());
+            doThrow(BicycleNotFoundException.class).when(maintenanceService).putBicycleAvailable(anyString());
             ResponseEntity<BicycleDetailsDTO> response = bicycleController.putBicycleAvailable("1234");
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
 
         @Test
         void shouldReturnHttpBadRequestWhenIdIsInvalid() {
-            doThrow(InvalidBicycleIdException.class).when(bicycleService).putBicycleAvailable(anyString());
-            doThrow(InvalidBicycleIdException.class).when(bicycleService).putBicycleAvailable(null);
+            doThrow(InvalidBicycleIdException.class).when(maintenanceService).putBicycleAvailable(anyString());
+            doThrow(InvalidBicycleIdException.class).when(maintenanceService).putBicycleAvailable(null);
             var response = bicycleController.putBicycleAvailable("");
             assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 

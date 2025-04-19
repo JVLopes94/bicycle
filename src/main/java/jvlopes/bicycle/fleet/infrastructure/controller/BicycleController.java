@@ -1,6 +1,7 @@
 package jvlopes.bicycle.fleet.infrastructure.controller;
 
 import jvlopes.bicycle.fleet.application.BicycleService;
+import jvlopes.bicycle.fleet.application.MaintenanceService;
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.exception.BicycleNotFoundException;
@@ -24,9 +25,11 @@ import java.net.URI;
 public class BicycleController {
 
     private final BicycleService bicycleService;
+    private final MaintenanceService maintenanceService;
 
-    public BicycleController(BicycleService bicycleService) {
+    public BicycleController(BicycleService bicycleService, MaintenanceService maintenanceService) {
         this.bicycleService = bicycleService;
+        this.maintenanceService = maintenanceService;
     }
 
     @PostMapping
@@ -67,7 +70,7 @@ public class BicycleController {
     public ResponseEntity<BicycleDetailsDTO> putBicycleUnderMaintenance(String bicycleID) {
         Bicycle bicycle;
         try {
-            bicycle = bicycleService.putBicycleUnderMaintenance(bicycleID);
+            bicycle = maintenanceService.putBicycleUnderMaintenance(bicycleID);
         } catch (BicycleNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (InvalidBicycleIdException e) {
@@ -80,7 +83,7 @@ public class BicycleController {
     public ResponseEntity<BicycleDetailsDTO> putBicycleAvailable(String bicycleID) {
         Bicycle bicycle;
         try {
-            bicycle = bicycleService.putBicycleAvailable(bicycleID);
+            bicycle = maintenanceService.putBicycleAvailable(bicycleID);
         } catch (BicycleNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (InvalidBicycleIdException e) {

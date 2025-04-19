@@ -35,14 +35,4 @@ public class BicycleService {
         if (bicycle == null) throw new BicycleNotFoundException();
         return bicycle;
     }
-
-    public Bicycle putBicycleUnderMaintenance(String bicycleID) {
-        Bicycle bicycle = getByID(bicycleID);
-        bicycle.putUnderMaintenance();
-        return bicycle;
-    }
-
-    public Bicycle putBicycleAvailable(String bicycleID) {
-        return null;
-    }
 }
