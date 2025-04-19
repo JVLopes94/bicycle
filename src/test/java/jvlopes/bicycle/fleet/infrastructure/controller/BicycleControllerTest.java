@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,12 +30,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class BicycleControllerTest {
 
     @Mock
     private BicycleService bicycleService;
+
+    @Captor
+    ArgumentCaptor<Integer> pageCaptor;
+
+    @Captor
+    ArgumentCaptor<Integer> sizeCaptor;
 
     @InjectMocks
     private BicycleController bicycleController;
@@ -129,6 +138,18 @@ class BicycleControllerTest {
 
             assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
             assertEquals(serviceReturn.getContent().size(), responseBody.getNumberOfElements());
+        }
+
+        @ParameterizedTest
+        @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
+        void controllerShouldInvokeServiceWithCorrectParameters(PageResponse<Bicycle> serviceReturn) {
+            doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
+            bicycleController.list(0, 10);
+            verify(bicycleService).list(pageCaptor.capture(), sizeCaptor.capture());
+            int capturedPage = pageCaptor.getValue();
+            int capturedSize = sizeCaptor.getValue();
+            assertEquals(0, capturedPage);
+            assertEquals(10, capturedSize);
         }
 
     }
