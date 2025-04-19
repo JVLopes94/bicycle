@@ -37,6 +37,7 @@ public class BicycleService {
     }
 
     public Bicycle putBicycleUnderMaintenance(String bicycleID) {
+        Bicycle bicycle = getByID(bicycleID);
         return null;
     }
 

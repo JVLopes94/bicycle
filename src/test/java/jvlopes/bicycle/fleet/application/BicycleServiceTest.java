@@ -141,4 +141,21 @@ class BicycleServiceTest {
 
     }
 
+    @Nested
+    class PutBicycleUnderMaintenance {
+
+        @Test
+        void shouldThrowInvalidBicycleIdException() {
+            assertThrows(InvalidBicycleIdException.class, () -> bicycleService.putBicycleUnderMaintenance(""));
+            assertThrows(InvalidBicycleIdException.class, () -> bicycleService.putBicycleUnderMaintenance(null));
+        }
+
+        @Test
+        void shouldThrowBicycleNotFoundException() {
+            doReturn(null).when(bicycleRepository).findByID(any());
+            assertThrows(BicycleNotFoundException.class, () -> bicycleService.putBicycleUnderMaintenance("1234"));
+        }
+
+    }
+
 }
