@@ -1,5 +1,7 @@
 package jvlopes.bicycle.fleet.domain.entity;
 
+import jvlopes.bicycle.fleet.domain.exception.InvalidBicycleIdException;
+
 import java.util.Objects;
 
 public final class BicycleID {
@@ -12,7 +14,7 @@ public final class BicycleID {
     }
 
     private void validate(String id) {
-        if (id == null || id.isBlank()) throw new IllegalArgumentException("Invalid Bicycle ID");
+        if (id == null || id.isBlank()) throw new InvalidBicycleIdException();
     }
 
     @Override

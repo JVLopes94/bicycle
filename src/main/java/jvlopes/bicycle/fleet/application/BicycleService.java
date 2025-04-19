@@ -2,6 +2,7 @@ package jvlopes.bicycle.fleet.application;
 
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
+import jvlopes.bicycle.fleet.domain.entity.BicycleID;
 import jvlopes.bicycle.fleet.domain.exception.BicycleNotFoundException;
 import jvlopes.bicycle.fleet.domain.exception.InvalidBicycleIdException;
 import jvlopes.bicycle.fleet.domain.repository.BicycleRepository;
@@ -30,6 +31,7 @@ public class BicycleService {
     }
 
     public Bicycle getByID(String bicycleID) throws InvalidBicycleIdException, BicycleNotFoundException {
+        new BicycleID(bicycleID);
         return null;
     }
 
