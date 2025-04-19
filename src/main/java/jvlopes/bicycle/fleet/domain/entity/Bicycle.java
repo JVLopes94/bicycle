@@ -9,7 +9,7 @@ public final class Bicycle {
 
     private final BicycleID id;
     private final String model;
-    private final BicycleStatus status;
+    private BicycleStatus status;
     private final String location;
     private final LocalDateTime lastMaintenanceDate;
 
@@ -87,5 +87,9 @@ public final class Bicycle {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void putUnderMaintenance() {
+        status = BicycleStatus.UNDER_MAINTENANCE;
     }
 }

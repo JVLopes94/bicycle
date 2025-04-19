@@ -126,7 +126,7 @@ class BicycleServiceTest {
         }
 
         @Test
-        void shouldPassCorrectBicycleIdToRepository() {
+        void shouldPassCorrectParametersToRepository() {
             BicycleID expectedBicycleID = new BicycleID("abc-123");
             Bicycle expectedBicycle = BicycleTestFactory.createBicycleWithID(expectedBicycleID);
             doReturn(expectedBicycle).when(bicycleRepository).findByID(any());
@@ -144,6 +144,9 @@ class BicycleServiceTest {
     @Nested
     class PutBicycleUnderMaintenance {
 
+        @Captor
+        ArgumentCaptor<BicycleID> bicycleIDCaptor;
+
         @Test
         void shouldThrowInvalidBicycleIdException() {
             assertThrows(InvalidBicycleIdException.class, () -> bicycleService.putBicycleUnderMaintenance(""));
@@ -154,6 +157,21 @@ class BicycleServiceTest {
         void shouldThrowBicycleNotFoundException() {
             doReturn(null).when(bicycleRepository).findByID(any());
             assertThrows(BicycleNotFoundException.class, () -> bicycleService.putBicycleUnderMaintenance("1234"));
+        }
+
+        @Test
+        void shouldPassCorrectParametersToRepository() {
+            BicycleID expectedBicycleID = new BicycleID("abc-123");
+            Bicycle expectedBicycle = BicycleTestFactory.createBicycleWithID(expectedBicycleID);
+            doReturn(expectedBicycle).when(bicycleRepository).findByID(any());
+
+            Bicycle returnedBicycle = bicycleService.putBicycleUnderMaintenance("abc-123");
+
+            verify(bicycleRepository).findByID(bicycleIDCaptor.capture());
+            BicycleID captured = bicycleIDCaptor.getValue();
+            assertEquals(expectedBicycleID, captured);
+            assertEquals(expectedBicycle, returnedBicycle);
+            assertEquals(BicycleStatus.UNDER_MAINTENANCE, returnedBicycle.getStatus());
         }
 
     }

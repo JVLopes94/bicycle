@@ -38,7 +38,8 @@ public class BicycleService {
 
     public Bicycle putBicycleUnderMaintenance(String bicycleID) {
         Bicycle bicycle = getByID(bicycleID);
-        return null;
+        bicycle.putUnderMaintenance();
+        return bicycle;
     }
 
     public Bicycle putBicycleAvailable(String bicycleID) {
