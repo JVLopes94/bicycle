@@ -110,6 +110,9 @@ class BicycleServiceTest {
     @Nested
     class GetByID {
 
+        @Captor
+        ArgumentCaptor<BicycleID> bicycleIDCaptor;
+
         @Test
         void shouldThrowInvalidBicycleIdException() {
             assertThrows(InvalidBicycleIdException.class, () -> bicycleService.getByID(""));
@@ -120,6 +123,20 @@ class BicycleServiceTest {
         void shouldThrowBicycleNotFoundException() {
             doReturn(null).when(bicycleRepository).findByID(any());
             assertThrows(BicycleNotFoundException.class, () -> bicycleService.getByID("1234"));
+        }
+
+        @Test
+        void shouldPassCorrectBicycleIdToRepository() {
+            BicycleID expectedBicycleID = new BicycleID("abc-123");
+            Bicycle expectedBicycle = BicycleTestFactory.createBicycleWithID(expectedBicycleID);
+            doReturn(expectedBicycle).when(bicycleRepository).findByID(any());
+
+            Bicycle returnedBicycle = bicycleService.getByID("abc-123");
+
+            verify(bicycleRepository).findByID(bicycleIDCaptor.capture());
+            BicycleID captured = bicycleIDCaptor.getValue();
+            assertEquals(expectedBicycleID, captured);
+            assertEquals(expectedBicycle, returnedBicycle);
         }
 
     }
