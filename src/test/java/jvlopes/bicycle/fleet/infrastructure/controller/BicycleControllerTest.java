@@ -17,6 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.verification.Times;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -47,6 +48,9 @@ class BicycleControllerTest {
 
     @Captor
     ArgumentCaptor<BicycleStatus> statusCaptor;
+
+    @Captor
+    ArgumentCaptor<Bicycle> bicycleCaptor;
 
     @InjectMocks
     private BicycleController bicycleController;
@@ -101,6 +105,23 @@ class BicycleControllerTest {
             assertTrue(responseHeaders.containsKey("Location"));
             assertNotNull(responseHeaders.getLocation());
             assertTrue(responseHeaders.getLocation().toString().contains(bicycleId));
+        }
+
+        @Test
+        void shouldInvokeServiceCreate() {
+            String id = "113ec296-9048-4f87-9aab-d075fae6e767";
+            doReturn(BicycleTestFactory.createBicycleWithID(new BicycleID(id)))
+                    .when(bicycleService).save(any());
+            bicycleController.create(new CreateBicycleDTO(
+                    id,
+                    "model",
+                    "AVAILABLE",
+                    "SP",
+                    "2025-04-10T10:15:30"
+            ));
+            verify(bicycleService, new Times(1)).save(bicycleCaptor.capture());
+            Bicycle capturedBicycle = bicycleCaptor.getValue();
+            assertEquals(id, capturedBicycle.getId().toString());
         }
     }
 
