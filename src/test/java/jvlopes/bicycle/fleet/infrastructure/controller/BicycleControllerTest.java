@@ -99,12 +99,16 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnCorrectResponse() {
-            doReturn(new PageImpl<Bicycle>(new ArrayList<>())).when(bicycleService).list(anyInt(), anyInt());
+            ArrayList<Bicycle> existingBicycles = new ArrayList<>();
+            var serviceReturn = new PageImpl<>(existingBicycles);
+            doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
+
             ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list();
             Page<BicycleDetailsDTO> responseBody = response.getBody();
             assertNotNull(responseBody);
 
-            assertEquals(0, responseBody.getTotalElements());
+            assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
+            assertEquals(0, responseBody.getContent().size());
         }
 
     }

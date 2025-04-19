@@ -34,10 +34,6 @@ public class BicycleController {
 
     public ResponseEntity<Page<BicycleDetailsDTO>> list() {
         Page<Bicycle> bicycles = bicycleService.list(0, 0);
-        return ResponseEntity.ok(
-                new PageImpl<>(
-                        bicycles.map(BicycleDetailsDTO::fromBicycle).stream().toList()
-                )
-        );
+        return ResponseEntity.ok(bicycles.map(BicycleDetailsDTO::fromBicycle));
     }
 }
