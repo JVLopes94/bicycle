@@ -50,11 +50,11 @@ public class BicycleController {
         ));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BicycleDetailsDTO> getByID(String id) {
+    @GetMapping("/{bicycleID}")
+    public ResponseEntity<BicycleDetailsDTO> getByID(String bicycleID) {
         Bicycle bicycle;
         try {
-            bicycle = bicycleService.getByID(id);
+            bicycle = bicycleService.getByID(bicycleID);
         } catch (BicycleNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (InvalidBicycleIdException e) {

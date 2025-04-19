@@ -29,7 +29,7 @@ public class BicycleService {
         return repo.findAllByStatus(status, page, size);
     }
 
-    public Bicycle getByID(String id) throws InvalidBicycleIdException, BicycleNotFoundException {
+    public Bicycle getByID(String bicycleID) throws InvalidBicycleIdException, BicycleNotFoundException {
         return null;
     }
 
