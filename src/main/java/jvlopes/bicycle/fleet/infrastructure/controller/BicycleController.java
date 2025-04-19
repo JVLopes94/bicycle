@@ -76,6 +76,7 @@ public class BicycleController {
         return ResponseEntity.ok(BicycleDetailsDTO.fromBicycle(bicycle));
     }
 
+    @PutMapping("/{bicycleID}/available")
     public ResponseEntity<BicycleDetailsDTO> putBicycleAvailable(String bicycleID) {
         Bicycle bicycle;
         try {
