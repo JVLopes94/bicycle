@@ -5,6 +5,8 @@ import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
+import jvlopes.bicycle.fleet.domain.exception.BicycleNotFoundException;
+import jvlopes.bicycle.fleet.domain.exception.InvalidBicycleIdException;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
@@ -30,8 +32,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BicycleControllerTest {
@@ -216,12 +217,15 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnHttpNotFoundWhenIdDoesNotExist() {
+            doThrow(BicycleNotFoundException.class).when(bicycleService).getByID(anyString());
             ResponseEntity<BicycleDetailsDTO> response = bicycleController.getByID("1234");
             assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         }
 
         @Test
         void shouldReturnHttpBadRequestWhenIdIsInvalid() {
+            doThrow(InvalidBicycleIdException.class).when(bicycleService).getByID(anyString());
+            doThrow(InvalidBicycleIdException.class).when(bicycleService).getByID(null);
             var response = bicycleController.getByID("");
             assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 

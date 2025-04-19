@@ -2,8 +2,13 @@ package jvlopes.bicycle.fleet.application;
 
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
+import jvlopes.bicycle.fleet.domain.entity.BicycleID;
+import jvlopes.bicycle.fleet.domain.exception.BicycleNotFoundException;
+import jvlopes.bicycle.fleet.domain.exception.InvalidBicycleIdException;
 import jvlopes.bicycle.fleet.domain.repository.BicycleRepository;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +32,7 @@ public class BicycleService {
         return repo.findAllByStatus(status, page, size);
     }
 
-    public Bicycle getByID(String id) {
+    public Bicycle getByID(String id) throws InvalidBicycleIdException, BicycleNotFoundException {
         return null;
     }
 }
