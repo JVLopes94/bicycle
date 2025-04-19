@@ -3,6 +3,7 @@ package jvlopes.bicycle.fleet.infrastructure.controller;
 import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
+import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.springframework.data.domain.Page;
@@ -35,8 +36,10 @@ public class BicycleController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<BicycleDetailsDTO>> list(int page, int size) {
-        PageResponse<Bicycle> bicycles = bicycleService.list(page, size);
+    public ResponseEntity<Page<BicycleDetailsDTO>> list(BicycleStatus status, int page, int size) {
+        PageResponse<Bicycle> bicycles = (status == null)
+                ? bicycleService.list(page, size)
+                : bicycleService.listByStatus(status, page, size);
         return ResponseEntity.ok(new PageImpl<>(
                 bicycles.getContent().stream().map(BicycleDetailsDTO::fromBicycle).toList(),
                 PageRequest.of(page, size),

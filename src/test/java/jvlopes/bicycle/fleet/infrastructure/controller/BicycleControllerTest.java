@@ -5,6 +5,7 @@ import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
+import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.junit.jupiter.api.Nested;
@@ -43,6 +44,9 @@ class BicycleControllerTest {
 
     @Captor
     ArgumentCaptor<Integer> sizeCaptor;
+
+    @Captor
+    ArgumentCaptor<BicycleStatus> statusCaptor;
 
     @InjectMocks
     private BicycleController bicycleController;
@@ -107,7 +111,7 @@ class BicycleControllerTest {
         void shouldReturnHttpOk() {
             doReturn(new PageResponse<Bicycle>(new ArrayList<>(), 0))
                     .when(bicycleService).list(anyInt(), anyInt());
-            var response = bicycleController.list(0, 10);
+            var response = bicycleController.list(null, 0, 10);
             assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
@@ -116,7 +120,7 @@ class BicycleControllerTest {
         void responseShouldContainAllBicyclesReturnedByService(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
-            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(0, 10);
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(null, 0, 10);
             Page<BicycleDetailsDTO> responseBody = response.getBody();
             assertNotNull(responseBody);
 
@@ -132,7 +136,7 @@ class BicycleControllerTest {
         void responseShouldContainCorrectPaginationData(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
-            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(0, 10);
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(null, 0, 10);
             Page<BicycleDetailsDTO> responseBody = response.getBody();
             assertNotNull(responseBody);
 
@@ -144,12 +148,26 @@ class BicycleControllerTest {
         @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
         void controllerShouldInvokeServiceWithCorrectPaginationParameters(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
-            bicycleController.list(0, 10);
+            bicycleController.list(null, 0, 10);
             verify(bicycleService).list(pageCaptor.capture(), sizeCaptor.capture());
             int capturedPage = pageCaptor.getValue();
             int capturedSize = sizeCaptor.getValue();
             assertEquals(0, capturedPage);
             assertEquals(10, capturedSize);
+        }
+
+        @ParameterizedTest
+        @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
+        void controllerShouldInvokeServiceWithCorrectFilterParameter(PageResponse<Bicycle> serviceReturn) {
+            doReturn(serviceReturn).when(bicycleService).listByStatus(any(), anyInt(), anyInt());
+            bicycleController.list(BicycleStatus.AVAILABLE, 0, 10);
+            verify(bicycleService).listByStatus(statusCaptor.capture(), pageCaptor.capture(), sizeCaptor.capture());
+            int capturedPage = pageCaptor.getValue();
+            int capturedSize = sizeCaptor.getValue();
+            BicycleStatus capturedStatus = statusCaptor.getValue();
+            assertEquals(0, capturedPage);
+            assertEquals(10, capturedSize);
+            assertEquals(BicycleStatus.AVAILABLE, capturedStatus);
         }
 
     }
