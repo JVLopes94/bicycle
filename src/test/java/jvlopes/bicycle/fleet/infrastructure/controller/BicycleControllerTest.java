@@ -4,7 +4,7 @@ import jvlopes.bicycle.factory.BicycleTestFactory;
 import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
-import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleCreatedDTO;
+import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -51,14 +51,14 @@ class BicycleControllerTest {
             String bicycleId = "113ec296-9048-4f87-9aab-d075fae6e767";
             Bicycle createdBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
             doReturn(createdBicycle).when(bicycleService).save(any());
-            ResponseEntity<BicycleCreatedDTO> response = bicycleController.create(new CreateBicycleDTO(
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.create(new CreateBicycleDTO(
                     bicycleId,
                     "model",
                     "AVAILABLE",
                     "SP",
                     "2025-04-10T10:15:30"
             ));
-            BicycleCreatedDTO responseBody = response.getBody();
+            BicycleDetailsDTO responseBody = response.getBody();
             assertNotNull(responseBody);
             assertEquals(responseBody.id(), createdBicycle.getId().toString());
         }
@@ -68,7 +68,7 @@ class BicycleControllerTest {
             String bicycleId = "113e-c296-9048";
             Bicycle createdBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
             doReturn(createdBicycle).when(bicycleService).save(any());
-            ResponseEntity<BicycleCreatedDTO> response = bicycleController.create(new CreateBicycleDTO(
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.create(new CreateBicycleDTO(
                     bicycleId,
                     "model",
                     "AVAILABLE",
@@ -94,7 +94,7 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnCorrectResponse() {
-            ResponseEntity<Page<BicycleCreatedDTO>> response = bicycleController.list();
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list();
             var responseBody = response.getBody();
             assertNotNull(responseBody);
         }

@@ -2,15 +2,15 @@ package jvlopes.bicycle.fleet.infrastructure.controller.dto;
 
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 
-public record BicycleCreatedDTO(
+public record BicycleDetailsDTO(
         String id,
         String model,
         String status,
         String location,
         String lastMaintenanceDate
 ) {
-    public static BicycleCreatedDTO fromBicycle(Bicycle bicycle) {
-        return new BicycleCreatedDTO(
+    public static BicycleDetailsDTO fromBicycle(Bicycle bicycle) {
+        return new BicycleDetailsDTO(
                 bicycle.getId().toString(),
                 bicycle.getModel(),
                 bicycle.getStatus().toString(),
