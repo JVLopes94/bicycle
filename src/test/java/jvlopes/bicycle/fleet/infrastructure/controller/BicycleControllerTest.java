@@ -142,7 +142,7 @@ class BicycleControllerTest {
 
         @ParameterizedTest
         @MethodSource("jvlopes.bicycle.factory.BicycleTestFactory#bicycleListProvider")
-        void controllerShouldInvokeServiceWithCorrectParameters(PageResponse<Bicycle> serviceReturn) {
+        void controllerShouldInvokeServiceWithCorrectPaginationParameters(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
             bicycleController.list(0, 10);
             verify(bicycleService).list(pageCaptor.capture(), sizeCaptor.capture());
