@@ -50,4 +50,13 @@ public class BicycleTestFactory {
         );
     }
 
+    public static Bicycle createBicycleUnderMaintenanceWithID(BicycleID bicycleID) {
+        return new Bicycle(
+                bicycleID,
+                "model",
+                BicycleStatus.UNDER_MAINTENANCE,
+                "SP",
+                LocalDateTime.now()
+        );
+    }
 }

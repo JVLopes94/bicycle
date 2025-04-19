@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -54,6 +55,19 @@ public class BicycleController {
         Bicycle bicycle;
         try {
             bicycle = bicycleService.getByID(id);
+        } catch (BicycleNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (InvalidBicycleIdException e) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(BicycleDetailsDTO.fromBicycle(bicycle));
+    }
+
+    @PutMapping("/{bicycleID}/maintenance")
+    public ResponseEntity<BicycleDetailsDTO> putBicycleUnderMaintenance(String bicycleID) {
+        Bicycle bicycle;
+        try {
+            bicycle = bicycleService.putBicycleUnderMaintenance(bicycleID);
         } catch (BicycleNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (InvalidBicycleIdException e) {

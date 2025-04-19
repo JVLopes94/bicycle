@@ -226,4 +226,40 @@ class BicycleControllerTest {
         }
 
     }
+
+    @Nested
+    class PutBicycleUnderMaintenance {
+
+        @Test
+        void shouldReturnUpdatedBicycleWithSameIdWhenItExists() {
+            String bicycleId = "1234";
+            Bicycle foundBicycle = BicycleTestFactory.createBicycleUnderMaintenanceWithID(new BicycleID(bicycleId));
+            doReturn(foundBicycle).when(bicycleService).getByID(anyString());
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.putBicycleUnderMaintenance(bicycleId);
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+            assertNotNull(response.getBody());
+            assertEquals(bicycleId, response.getBody().id());
+            assertEquals(BicycleStatus.UNDER_MAINTENANCE.toString(), response.getBody().status());
+        }
+
+        @Test
+        void shouldReturnHttpNotFoundWhenIdDoesNotExist() {
+            doThrow(BicycleNotFoundException.class).when(bicycleService).getByID(anyString());
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.putBicycleUnderMaintenance("1234");
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
+
+        @Test
+        void shouldReturnHttpBadRequestWhenIdIsInvalid() {
+            doThrow(InvalidBicycleIdException.class).when(bicycleService).getByID(anyString());
+            doThrow(InvalidBicycleIdException.class).when(bicycleService).getByID(null);
+            var response = bicycleController.putBicycleUnderMaintenance("");
+            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+            response = bicycleController.putBicycleUnderMaintenance(null);
+            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        }
+
+    }
+
 }
