@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -97,10 +96,9 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnHttpOk() {
-            doReturn(new PageResponse<Bicycle>(
-                    new ArrayList<>(), 0, 0, 0, 1
-            )).when(bicycleService).list(anyInt(), anyInt());
-            var response = bicycleController.list(PageRequest.of(0, 10));
+            doReturn(new PageResponse<Bicycle>(new ArrayList<>(), 0))
+                    .when(bicycleService).list(anyInt(), anyInt());
+            var response = bicycleController.list(0, 10);
             assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
@@ -109,7 +107,7 @@ class BicycleControllerTest {
         void responseShouldContainAllBicyclesReturnedByService(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
-            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(PageRequest.of(0, 10));
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(0, 10);
             Page<BicycleDetailsDTO> responseBody = response.getBody();
             assertNotNull(responseBody);
 
@@ -125,13 +123,11 @@ class BicycleControllerTest {
         void responseShouldContainCorrectPaginationData(PageResponse<Bicycle> serviceReturn) {
             doReturn(serviceReturn).when(bicycleService).list(anyInt(), anyInt());
 
-            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(PageRequest.of(0, 10));
+            ResponseEntity<Page<BicycleDetailsDTO>> response = bicycleController.list(0, 10);
             Page<BicycleDetailsDTO> responseBody = response.getBody();
             assertNotNull(responseBody);
 
             assertEquals(serviceReturn.getTotalElements(), responseBody.getTotalElements());
-            assertEquals(serviceReturn.getTotalPages(), responseBody.getTotalPages());
-            assertEquals(serviceReturn.getPageSize(), responseBody.getSize());
             assertEquals(serviceReturn.getContent().size(), responseBody.getNumberOfElements());
         }
 

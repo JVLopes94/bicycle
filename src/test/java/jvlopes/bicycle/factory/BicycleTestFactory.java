@@ -33,20 +33,16 @@ public class BicycleTestFactory {
     }
 
     public static Stream<Arguments> bicycleListProvider() {
-        PageResponse<Bicycle> emptyResponse = new PageResponse<>(
-                List.of(), 0, 0, 0, 10
-        );
+        PageResponse<Bicycle> emptyResponse = new PageResponse<>(List.of(), 0);
+
         List<Bicycle> content = List.of(createBicycleWithID(new BicycleID("1234")));
-        PageResponse<Bicycle> responseWithOneItem = new PageResponse<>(
-                content, 1, 1, 0, 10
-        );
+        PageResponse<Bicycle> responseWithOneItem = new PageResponse<>(content, 1);
+
         List<Bicycle> content2 = List.of(
                 createBicycleWithID(new BicycleID("1234")),
                 createBicycleWithID(new BicycleID("5678"))
         );
-        PageResponse<Bicycle> responseWithTwoItems = new PageResponse<>(
-                content2, 2, 1, 0, 10
-        );
+        PageResponse<Bicycle> responseWithTwoItems = new PageResponse<>(content2, 2);
         return Stream.of(
                 Arguments.of(emptyResponse),
                 Arguments.of(responseWithOneItem),

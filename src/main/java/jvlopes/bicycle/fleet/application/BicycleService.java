@@ -18,7 +18,7 @@ public class BicycleService {
         return repo.save(bicycle);
     }
 
-    public PageResponse<Bicycle> list(int pageNumber, int pageSize) {
-        return repo.findAll(pageNumber, pageSize);
+    public PageResponse<Bicycle> list(int page, int size) {
+        return repo.findAll(page, size);
     }
 }

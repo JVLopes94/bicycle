@@ -7,9 +7,10 @@ import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,15 +34,13 @@ public class BicycleController {
                 .body(BicycleDetailsDTO.fromBicycle(bicycle));
     }
 
-    public ResponseEntity<Page<BicycleDetailsDTO>> list(Pageable pageable) {
-        PageResponse<Bicycle> bicycles = bicycleService.list(
-                pageable.getPageNumber(),
-                pageable.getPageSize()
-        );
+    @GetMapping
+    public ResponseEntity<Page<BicycleDetailsDTO>> list(int page, int size) {
+        PageResponse<Bicycle> bicycles = bicycleService.list(page, size);
         return ResponseEntity.ok(new PageImpl<>(
                 bicycles.getContent().stream().map(BicycleDetailsDTO::fromBicycle).toList(),
-                pageable,
-                bicycles.getTotalPages()
+                PageRequest.of(page, size),
+                bicycles.getTotalElements()
         ));
     }
 }
