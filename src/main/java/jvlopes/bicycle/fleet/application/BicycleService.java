@@ -31,8 +31,9 @@ public class BicycleService {
     }
 
     public Bicycle getByID(String bicycleID) throws InvalidBicycleIdException, BicycleNotFoundException {
-        new BicycleID(bicycleID);
-        return null;
+        Bicycle bicycle = repo.findByID(new BicycleID(bicycleID));
+        if (bicycle == null) throw new BicycleNotFoundException();
+        return bicycle;
     }
 
     public Bicycle putBicycleUnderMaintenance(String bicycleID) {

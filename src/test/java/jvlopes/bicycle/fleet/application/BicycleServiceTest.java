@@ -3,6 +3,7 @@ package jvlopes.bicycle.fleet.application;
 import jvlopes.bicycle.factory.BicycleTestFactory;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
 import jvlopes.bicycle.fleet.domain.entity.BicycleID;
+import jvlopes.bicycle.fleet.domain.exception.BicycleNotFoundException;
 import jvlopes.bicycle.fleet.domain.exception.InvalidBicycleIdException;
 import jvlopes.bicycle.fleet.domain.repository.BicycleRepository;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
@@ -107,6 +108,12 @@ class BicycleServiceTest {
         void shouldThrowInvalidBicycleIdException() {
             assertThrows(InvalidBicycleIdException.class, () -> bicycleService.getByID(""));
             assertThrows(InvalidBicycleIdException.class, () -> bicycleService.getByID(null));
+        }
+
+        @Test
+        void shouldThrowBicycleNotFoundException() {
+            doReturn(null).when(bicycleRepository).findByID(any());
+            assertThrows(BicycleNotFoundException.class, () -> bicycleService.getByID("1234"));
         }
 
     }
