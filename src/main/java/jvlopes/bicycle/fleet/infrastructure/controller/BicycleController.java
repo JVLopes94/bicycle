@@ -3,6 +3,7 @@ package jvlopes.bicycle.fleet.infrastructure.controller;
 import jvlopes.bicycle.fleet.application.BicycleService;
 import jvlopes.bicycle.fleet.application.dto.PageResponse;
 import jvlopes.bicycle.fleet.domain.entity.Bicycle;
+import jvlopes.bicycle.fleet.domain.entity.BicycleID;
 import jvlopes.bicycle.fleet.domain.vo.BicycleStatus;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.BicycleDetailsDTO;
 import jvlopes.bicycle.fleet.infrastructure.controller.dto.CreateBicycleDTO;
@@ -49,6 +50,13 @@ public class BicycleController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BicycleDetailsDTO> getByID(String id) {
-        return ResponseEntity.ok().build();
+        try {
+            new BicycleID(id);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Bicycle bicycle = bicycleService.getByID(id);
+        if (bicycle == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(BicycleDetailsDTO.fromBicycle(bicycle));
     }
 }

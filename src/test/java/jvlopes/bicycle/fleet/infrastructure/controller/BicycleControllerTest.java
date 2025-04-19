@@ -29,8 +29,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -198,8 +197,36 @@ class BicycleControllerTest {
 
         @Test
         void shouldReturnHttpOk() {
-            var response = bicycleController.getByID("");
+            String bicycleId = "1234";
+            Bicycle createdBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
+            doReturn(createdBicycle).when(bicycleService).getByID(anyString());
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.getByID(bicycleId);
             assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
+
+        @Test
+        void shouldReturnBicycleWithSameIdWhenItExists() {
+            String bicycleId = "1234";
+            Bicycle createdBicycle = BicycleTestFactory.createBicycleWithID(new BicycleID(bicycleId));
+            doReturn(createdBicycle).when(bicycleService).getByID(anyString());
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.getByID(bicycleId);
+            assertNotNull(response.getBody());
+            assertEquals(bicycleId, response.getBody().id());
+        }
+
+        @Test
+        void shouldReturnHttpNotFoundWhenIdDoesNotExist() {
+            ResponseEntity<BicycleDetailsDTO> response = bicycleController.getByID("1234");
+            assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        }
+
+        @Test
+        void shouldReturnHttpBadRequestWhenIdIsInvalid() {
+            var response = bicycleController.getByID("");
+            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+            response = bicycleController.getByID(null);
+            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         }
 
     }

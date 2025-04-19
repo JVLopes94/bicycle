@@ -26,4 +26,8 @@ public class BicycleService {
     public PageResponse<Bicycle> listByStatus(BicycleStatus status, int page, int size) {
         return repo.findAllByStatus(status, page, size);
     }
+
+    public Bicycle getByID(String id) {
+        return null;
+    }
 }
